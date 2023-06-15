@@ -1,0 +1,174 @@
+﻿<Window x:Class="ModbusTCPApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Background="WhiteSmoke"
+        Title="Window1" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Button Command="{Binding AddCoilCommand}" FontSize="9" Grid.Column="1" Grid.Row="1" Cursor="Hand" Content="Add Coils"></Button>
+        <Button Command="{Binding AddHRCommand}" FontSize="9" Grid.Column="1" Grid.Row="3" Cursor="Hand" Content="Add HRs"></Button>
+        <Button Command="{Binding WriteCoilCommand}" FontSize="9" Grid.Column="1" Grid.Row="7" Cursor="Hand" Content="Write Coil"></Button>
+        <Button Command="{Binding WriteHRCommand}" FontSize="9" Grid.Column="1" Grid.Row="10" Cursor="Hand" Content="Write HR"></Button>
+        <Button Command="{Binding TimerReadIntervalCommand}" FontSize="9" Grid.Column="5" Grid.Row="1" Cursor="Hand" Content="ReadTime"></Button>
+        <Button Command="{Binding TimerScanIntervalCommand}" FontSize="9" Grid.Column="7" Grid.Row="1" Cursor="Hand" Content="ScanTime"></Button>
+
+        <Button Command="{Binding ClearDataCommand}" Grid.Column="9" Grid.Row="3" Cursor="Hand" Content="Clear"></Button>
+
+        <Button Command="{Binding ConnectCommand}" Grid.Column="6" Grid.Row="3" Cursor="Hand" Content="CNCT" FontSize="9"></Button>
+        <Button Command="{Binding DisconnectCommand}" Grid.Column="7" Grid.Row="3" Cursor="Hand" Content="DISCNT" FontSize="8"></Button>
+        
+        <Button Command="{Binding RefreshListCommand}" Grid.Column="11" Grid.Row="8" Cursor="Hand" Content="Refresh Coils" FontSize="8"></Button>
+        <Button Command="{Binding RefreshHRListCommand}" Grid.Column="12" Grid.Row="8" Cursor="Hand" Content="Refresh HR" FontSize="8"></Button>
+        <Button Command="{Binding WriteCoilListCommand}" Grid.Column="11" Grid.Row="10" Cursor="Hand" Content="Write Coil List" FontSize="8"></Button>
+        <Button Command="{Binding WriteHRListCommand}" Grid.Column="12" Grid.Row="10" Cursor="Hand" Content="Write HR List" FontSize="8"></Button>
+
+        <TextBlock Text="{Binding LogText}" Grid.Column="10" Grid.Row="9" Cursor="IBeam" FontSize="10" Background="White" />
+        <TextBlock Text="{Binding ResultCoilText}" Grid.Column="4" Grid.Row="7" Cursor="IBeam" Background="White" />
+        <TextBlock Text="{Binding ResultHRText}" Grid.Column="4" Grid.Row="10" Cursor="IBeam" Background="White" />
+
+        <DataGrid ItemsSource="{Binding Subscriptions}" FontSize="8" Cursor="IBeam" CanUserAddRows="False" AutoGenerateColumns="False" HeadersVisibility="Column" Grid.Column="10" Grid.Row="2" ColumnWidth="*" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Server" FontSize="9" Binding="{Binding Server, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Type" FontSize="9" Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Addr" FontSize="9" Binding="{Binding Address, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Result" FontSize="9" Binding="{Binding Result, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DataGrid ItemsSource="{Binding Sockets}" FontSize="7" CanUserAddRows="False" AutoGenerateColumns="False" HeadersVisibility="Column" Grid.Column="7" Grid.Row="9" ColumnWidth="*" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Cnctd Srvs" FontSize="9" Binding="{Binding Number, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DataGrid ItemsSource="{Binding ValuesList}" FontSize="8" Cursor="IBeam" CanUserAddRows="False" AutoGenerateColumns="False" HeadersVisibility="Column" Grid.Column="11" Grid.Row="9" ColumnWidth="*" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Addr" FontSize="9" Binding="{Binding Address, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Value" FontSize="9" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DataGrid ItemsSource="{Binding ValuesHRList}" FontSize="8" Cursor="IBeam" CanUserAddRows="False" AutoGenerateColumns="False" HeadersVisibility="Column" Grid.Column="12" Grid.Row="9" ColumnWidth="*" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Addr" FontSize="9" Binding="{Binding Address, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Value" FontSize="9" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <ComboBox ItemsSource="{Binding Sockets}"
+          DisplayMemberPath="Number"
+          SelectedValue="{Binding SelectedServer}"
+          SelectedValuePath="Number"
+          IsSynchronizedWithCurrentItem="True"
+          Text="Select Option" FontSize="12" Cursor="IBeam" Grid.Column="6" Grid.Row="8" ScrollViewer.VerticalScrollBarVisibility="Auto">
+        </ComboBox>
+
+        <TextBox Text="{Binding AddCoilText}" Grid.Column="2" Grid.Row="1" Cursor="IBeam" Background="White"></TextBox>
+        <TextBox Text="{Binding AddHRText}" Grid.Column="2" Grid.Row="3" Cursor="IBeam" Background="White" />
+        <TextBox Text="{Binding IPText}" Grid.Column="6" Grid.Row="4" Cursor="IBeam" Background="White" />
+        <TextBox Text="{Binding WriteCoilText}" Grid.Column="2" Grid.Row="7" Cursor="IBeam" Background="White" />
+        <TextBox Text="{Binding WriteHRText}" Grid.Column="2" Grid.Row="10" Cursor="IBeam" Background="White" />
+        <TextBox Text="{Binding ValueCoilText}" Grid.Column="3" Grid.Row="7" Cursor="IBeam" Background="White" />
+        <TextBox Text="{Binding ValueHRText}" Grid.Column="3" Grid.Row="10" Cursor="IBeam" Background="White" />
+        
+        <TextBox Text="{Binding TimerReadIntervalText}" Grid.Column="6" Grid.Row="1" Cursor="IBeam" Background="White" />
+        <TextBox Text="{Binding TimerScanIntervalText}" Grid.Column="8" Grid.Row="1" Cursor="IBeam" Background="White" />
+
+        <TextBox Text="{Binding NumberCoilText}" Grid.Column="3" Grid.Row="1" Cursor="IBeam" Background="White"></TextBox>
+        <TextBox Text="{Binding NumberHRText}" Grid.Column="3" Grid.Row="3" Cursor="IBeam" Background="White"></TextBox>
+
+        <Label Content="Strt Add" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2"></Label>
+        <Label Content="Strt Add" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="2"></Label>
+        <Label Content="IP Addr" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="5" Grid.Row="4"></Label>
+        <Label Content="Number" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="3"></Label>
+        <Label Content="Number" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="3" Grid.Row="2"></Label>
+
+        <Label Content="LOG" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="10" Grid.Row="8"></Label>
+        <Label Content="Address" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="6"></Label>
+        <Label Content="Address" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="9"></Label>
+        <Label Content="Coil (0/1)" FontSize="8" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="3" Grid.Row="6"></Label>
+        <Label Content="Value" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="3" Grid.Row="9"></Label>
+        <Label Content="Result" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="4" Grid.Row="6"></Label>
+        <Label Content="Result" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="4" Grid.Row="9"></Label>
+        <Label Content="Server" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="6" Grid.Row="7"></Label>
+
+        <Grid Grid.Column="10" Grid.Row="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Command="{Binding CleanLogCommand}" Grid.Column="1" Cursor="Hand" Content="Clean LOG"></Button>
+        </Grid>
+
+        <Grid Grid.Column="11" Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding StartAddressWText}" Cursor="IBeam" Background="White"></TextBox>
+            <TextBox Text="{Binding NumberCoilWText}" Grid.Column="1" Cursor="IBeam" Background="White"></TextBox>
+        </Grid>
+
+        <Grid Grid.Column="11" Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Strt. addr" FontSize="8" HorizontalAlignment="Center" VerticalAlignment="Bottom"></Label>
+            <Label Content="NumCoils" Grid.Column="1" FontSize="8" HorizontalAlignment="Center" VerticalAlignment="Bottom"></Label>
+        </Grid>
+
+        <Grid Grid.Column="12" Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding StartAddressWHRText}" Cursor="IBeam" Background="White"></TextBox>
+            <TextBox Text="{Binding NumberHRWText}" Grid.Column="1" Cursor="IBeam" Background="White"></TextBox>
+        </Grid>
+
+        <Grid Grid.Column="12" Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Strt. addr" FontSize="8" HorizontalAlignment="Center" VerticalAlignment="Bottom"></Label>
+            <Label Content="Num HRs" Grid.Column="1" FontSize="8" HorizontalAlignment="Center" VerticalAlignment="Bottom"></Label>
+        </Grid>
+    </Grid>
+</Window>
